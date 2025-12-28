@@ -127,10 +127,8 @@ namespace McMaster.Extensions.CommandLineUtils
                     var keyedAttr = methodParam.GetCustomAttribute<FromKeyedServicesAttribute>();
                     if (keyedAttr != null)
                     {
-                        if (command.AdditionalServices is not IKeyedServiceProvider keyedServiceProvider)
-                        {
-                            throw new InvalidOperationException("AdditionalServices does not support keyed service resolution.");
-                        }
+
+                        var keyedServiceProvider = (IKeyedServiceProvider)command.AdditionalServices!;
 
                         arguments[i] = keyedServiceProvider.GetKeyedService(methodParam.ParameterType, keyedAttr.Key)
                                        ?? throw new InvalidOperationException($"No keyed service found for type {methodParam.ParameterType} and key '{keyedAttr.Key}'.");
